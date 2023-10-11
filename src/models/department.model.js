@@ -5,18 +5,16 @@
 const { mongoose } = require('../configs/dbConnection')
 /* ------------------------------------------------------- */
 
-// department
+const DepartmentSchema = new mongoose.Schema({ // Bu bir classdan turetilmis bir instancedir
 
-const DepartmentSchema =new mongoose.Schema({   // Bu bir classdan turetilmis bir instancedir
-    name:{
+    name: {
         type: String,
         trim: true,
-        require: true,
+        required: true,
         unique: true
     }
-},{collection:"departments", timestamps:true})
 
-
+}, { collection: "departments", timestamps: true })
 
 /* ------------------------------------------------------- */
-module.exports=mongoose.model('Department', DepartmentSchema)
+module.exports = mongoose.model('Department', DepartmentSchema)

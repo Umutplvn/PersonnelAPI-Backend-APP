@@ -17,7 +17,6 @@ module.exports = {
             detail: await res.getModelListDetails(Department),
             data // data: data
         })
-
     },
 
     create: async (req, res) => {
