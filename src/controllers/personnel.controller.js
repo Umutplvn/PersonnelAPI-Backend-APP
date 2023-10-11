@@ -7,7 +7,7 @@ const Personnel = require("../models/personnel.model");
 
 module.exports = {
   list: async (req, res) => {
-    const data = await res.getModelList(Personnel, {}, "departmentId");
+    const data = await res.getModelList(Personnel, {}, "departmentId"); // Uc parametreli bir fonksiyon-findSearchSortPage.js den geldi
 
     res.status(200).send({
       error: false,
@@ -47,10 +47,7 @@ module.exports = {
     // isLead Control:
     const isLead = req.body?.isLead || false;
     if (isLead) {
-      const { departmentId } = await Personnel.findOne(
-        { _id: req.params.id },
-        { departmentId: 1 }
-      );
+      const { departmentId } = await Personnel.findOne({ _id: req.params.id },{ departmentId: 1 });
       await Personnel.updateMany(
         { departmentId, isLead: true },
         { isLead: false }
@@ -83,12 +80,12 @@ module.exports = {
     if (username && password) {
       const user = await Personnel.findOne({ username, password });
       if (user) {
-        // Set Session:
+        // Set Session: Oturumu kapattigin an siliniyor
         req.session = {
           id: user._id,
           password: user.password,
         };
-        // Set Cookie:
+        // Set Cookie:  Belirlenen sure doldugu an siliniyor
         if (req.body?.rememberMe) {
           req.sessionOptions.maxAge = 1000 * 60 * 60 * 24 * 3; // 3 Days
         }

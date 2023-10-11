@@ -38,9 +38,30 @@ app.use(express.json())
 //* SessionsCookies:
 app.use(require('cookie-session')({ secret: process.env.SECRET_KEY }))  //login vs islemlerinden sonra verileri session cookiese kaydadiyoruz ve session cookiesleri aktif hale getirmek icin bu modulu kullaniyoruz
 
-// res.getModelList():
+//* res.getModelList():
 app.use(require('./src/middlewares/findSearchSortPage'))    //Controllerde arama, siralama islemleri icin // bunu middleware icinde kullanma sebebimizse user, category vs gibi diger kategoriler icin parametre alarak her biri icin ayri ayri middleware olarak cagirabildik-fonksiyon degil cunku req, res'a ihtiyacimiz var
 
+
+//* Login/Logout Control Middleware
+app.use(async (req, res, next) => {
+
+    const Personnel = require('./src/models/personnel.model')
+
+    req.isLogin = false
+
+    if (req.session?.id) {
+
+        const user = await Personnel.findOne({ _id: req.session.id })
+
+        // if (user.password == req.session.password) {
+        //     req.isLogin = true
+        // }
+        req.isLogin = user.password == req.session.password
+    }
+    console.log('isLogin: ', req.isLogin)
+
+    next()
+})
 /* ------------------------------------------------------- */
 //! Routes
 
@@ -50,6 +71,18 @@ app.get('/', (req,res)=>{
         message:"Welcome Personnel API"
     })
 })
+
+
+// HomePath:
+app.all('/', (req, res) => {
+    res.send({
+        error: false,
+        message: 'Welcome to PERSONNEL API',
+        session: req.session,
+        isLogin: req.isLogin
+    })
+})
+
 
 
 // /departments
