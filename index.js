@@ -52,7 +52,11 @@ app.get('/', (req,res)=>{
 })
 
 
+// /departments
+app.use('/departments', require('./src/routes/department.router'))
 
+// /personnels
+app.use('/personnels', require('./src/routes/personnel.router'))
 
 
 /* ------------------------------------------------------- */
